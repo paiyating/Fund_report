@@ -3,6 +3,14 @@ library("dplyr")
 library("readxl")
 test <- readxl::read_excel("201905.xlsx")
 test$權重=round(test$權重,4)
+#轉換成中文
+# currency <- readxl::read_excel("貨幣.xlsx")
+# test$幣別=plyr::mapvalues(test$幣別,from = t(currency[,1]),to=t(currency[,2]))
+# # country <- readxl::read_excel("國家別.xlsx")
+# test$國家=plyr::mapvalues(test$國家,from = t(country[,1]),to=t(country[,2]))
+# issue <- readxl::read_excel("發行國.xlsx")
+# test$`ISO Country of Issue`=plyr::mapvalues(test$`ISO Country of Issue`,from=t(issue[,1]),to=t(issue[,2]))
+#remove(currency,country,issue)
 
 for (i in c(7:ncol(test))) {
   for (j in c(1:nrow(test))) {
@@ -30,9 +38,7 @@ for (i in c(1:nrow(holding))) {
 }
 final=merge(final,holding,by="基金名稱")
 write.csv(final, file = "現金&持股比率.csv", row.names = FALSE)
-holding<-NULL
-final<-NULL
-temp<-NULL
+remove(holding,j,final,temp)
 
 mer=cbind(test$基金名稱,test[,7],test$權重)
 mer=aggregate(as.numeric(mer[,3]), by=list(mer[,1],mer[,2]), FUN=sum)
@@ -68,10 +74,7 @@ for (i in c(10,11,15)) {
     mer=do.call(rbind, lapply(split(mer, mer$基金名稱), function(x) x[order(x$比率,decreasing = TRUE)[],]))
   write.csv(mer, file = paste0(names(test[i]), '.csv'), row.names = FALSE)
 }
-mer<-NULL
-test<-NULL
-i<-NULL
-j<-NULL
+remove(i,mer,test)
 # mer=cbind(test$基金名稱,test[,8],test[,9],test$權重)
 # mer=aggregate(as.numeric(mer[,4]), by=list(mer[,1],mer[,2],mer[,3]), FUN=sum)
 # colnames(mer)<-c("基金名稱","產業","次產業","比率")
