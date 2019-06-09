@@ -37,7 +37,7 @@ for (i in c(1:nrow(holding))) {
   }
 }
 final=merge(final,holding,by="基金名稱")
-write.csv(final, file = "現金&持股比率.csv", row.names = FALSE)
+write.csv(final, file = "現金比率.csv", row.names = FALSE)
 remove(holding,j,final,temp)
 
 mer=cbind(test$基金名稱,test[,7],test$權重)
